@@ -14,7 +14,7 @@ public class ISOConfig {
      */
     public static void main(String[] args) {
         if((args.length<1)||(args.length>2)) {
-            System.out.println("Incorrect Arguments: <InputFile> Optional:<OutputFile>");
+            System.out.println("Incorrect Arguments: <InputFile> Optional Panda:<OutputFile>");
             System.exit(0);
         }
         String outputFile;
