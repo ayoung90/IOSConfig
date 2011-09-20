@@ -9,51 +9,66 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
  *
- * @author G73
+ * @author G73, Adam
  */
 public class ReportCreator {
-    
- 
-    public void ReportCreator(){
 
+    public Map errorList = new HashMap();
+
+    public ReportCreator() {
+        errorList.put("A", "Weak Password");
+        errorList.put("B", "Weak Username");
+        errorList.put("C", "Unsafe Protocol");
     }
-    
-    public static void create(String[][] errorArray, String outputFile, String inputFile){
-        Calendar currentDate = Calendar.getInstance();
-        SimpleDateFormat formatter=  new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
-        String dateNow = formatter.format(currentDate.getTime());
-        SimpleDateFormat formatter2=  new SimpleDateFormat("ddMMMyy_HHmmss");
-        String dateNow2 = formatter2.format(currentDate.getTime());
-        Map errorList = new HashMap();
-        if (outputFile.length()==0){
-            outputFile="H:\\ISOConfig\\"+dateNow2+"_iosconfig.txt";
+
+    public static String timeNow() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return df.format(cal.getTime());
+    }
+
+    public static String timeNowFilePath() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("ddMMMyy_HHmmss");
+        return df.format(cal.getTime());
+    }
+
+    public String create(LinkedList<Vulnerability> List, String outputFile, String inputFile) throws Exception {
+
+        String dateNow = ReportCreator.timeNow();
+        String dateNow2 = ReportCreator.timeNowFilePath();
+
+        if (outputFile.length() == 0) {
+            //Changed to output to program launch directory rather than H: Drive
+            outputFile = dateNow2 + "_iosconfig.txt";
         }
-        errorList.put("A","Weak Password");
-        errorList.put("B","Weak Username");
-        errorList.put("C","Unsafe Protocol");
-        try{
-          // Create file 
-          FileWriter fstream = new FileWriter(outputFile);
-          BufferedWriter out = new BufferedWriter(fstream);
-          out.write("Cisco IOS Configuration Tool - Scan Results\n");
-          out.write(""+inputFile+" - ");
-          out.write(dateNow+"\n\n");
-          if(errorArray.length==0) {
+
+        // Create file 
+        FileWriter fstream = new FileWriter(outputFile);
+        BufferedWriter out = new BufferedWriter(fstream);
+
+        out.write("Cisco IOS Configuration Tool - Scan Results\n");
+        out.write("" + inputFile + " - ");
+        out.write(dateNow + "\n\n");
+
+        if (List.size() == 0) {
             out.write("No vulnerabilities present - Line 0 \n");
-          } else {
-              for(int i = 0;i<errorArray.length;i++) {
-                out.write("Violation:'"+errorArray[i][0]+"' \t\t "+errorList.get(errorArray[i][1])+"\t\t (Line "+errorArray[i][2]+")");
+        } else {
+            for (Vulnerability vuln : List) {
+                out.write("(Line: "
+                        + vuln.getLineNumber() + ") \t\t Violation: '"
+                        + vuln.getVulnerability() + "' \t\t "
+                        + this.errorList.get(vuln.getCode()) + "");
                 out.write("\n");
-              }
-          }
-          //Close the output stream
-          out.close();
-          }catch (Exception e){//Catch exception if any
-            System.err.println("Error: " + e.getMessage());
-          }
-        }        
+            }
+        }
+        //Close the output stream
+        out.close();
+        return outputFile;
     }
+}
