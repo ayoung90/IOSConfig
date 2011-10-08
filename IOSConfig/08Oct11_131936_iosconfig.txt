@@ -1,0 +1,15 @@
+Cisco IOS Configuration Tool - Scan Results
+Input.txt - 2011-10-08 13:19:36
+
+(Line: 22) 		 Violation: 'enable 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Unsafe Password Enabling - Should be 'Enable Secret'
+(Line: 25) 		 Violation: 'enable secret 7 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Weak Encrypted Password - Should be level '5'
+(Line: 27) 		 Violation: 'enable 7 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Unsafe Password Enabling - Should be 'Enable Secret'
+(Line: 27) 		 Violation: 'enable 7 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Weak Encrypted Password - Should be level '5'
+(Line: 29) 		 Violation: 'enable 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Unsafe Password Enabling - Should be 'Enable Secret'
+(Line: 32) 		 Violation: 'username keith password 0 LETMEIN' 		 Weak Encrypted Password - Should be level '5'
+(Line: 119) 		 Violation: 'access-list 103 permit tcp host 10.145.96.27 eq telnet any ' 		 Unsafe Access - Should not use 'Any'
+(Line: 120) 		 Violation: 'access-list 104 permit tcp host 192.168.96.27 eq 22 any ' 		 Unsafe Access - Should not use 'Any'
+(Line: 121) 		 Violation: 'access-list 105 permit tcp host 172.145.96.27 any established ' 		 Unsafe Access - Should not use 'Any'
+(Line: 139) 		 Violation: 'access-list 110 permit icmp any any' 		 Unsafe Access - Should not use 'Any'
+(Line: 140) 		 Violation: 'access-list 110 permit ip any any' 		 Unsafe Access - Should not use 'Any'
+11 Vulnerabilities Found

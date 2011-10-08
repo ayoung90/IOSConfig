@@ -21,9 +21,9 @@ public class ReportCreator {
     public Map errorList = new HashMap();
 
     public ReportCreator() {
-        errorList.put("A", "Weak Password");
-        errorList.put("B", "Weak Username");
-        errorList.put("C", "Unsafe Protocol");
+        errorList.put("A", "Unsafe Password Enabling - Should be 'Enable Secret'");
+        errorList.put("B", "Weak Encrypted Password - Should be level '5'");
+        errorList.put("C", "Unsafe Access - Should not use 'Any'");
     }
 
     public static String timeNow() {
@@ -67,6 +67,7 @@ public class ReportCreator {
                 out.write("\n");
             }
         }
+        out.write("\n"+List.size()+" Vulnerabilities Found\n");
         //Close the output stream
         out.close();
         return outputFile;
