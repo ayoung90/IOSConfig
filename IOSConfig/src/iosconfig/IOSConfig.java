@@ -57,13 +57,13 @@ public class IOSConfig {
         /* TEMPORARY */
         /* Array contents: Violation, ViolationType, Line*/
 
-        /*ios.VulnList.add(new Vulnerability(2, "Password: Password", "A"));
+        ios.VulnList.add(new Vulnerability(2, "Password: Password", "A"));
         ios.VulnList.add(new Vulnerability(45, "Username: Username", "B"));
         ios.VulnList.add(new Vulnerability(47, "Password: Password", "C"));
-        ios.VulnList.add(new Vulnerability(2, "Protocol: Any", "A"));*/
+        ios.VulnList.add(new Vulnerability(2, "Protocol: Any", "A"));
 
         /*Passing to ReportCreator */
-        ios.VulnList=LineChecker.checkLines(fileArray);
+
         ios.generateReport(outputFile, inputFile);
 
         //ReportCreator.create(VulnList, outputFile, inputFile);
