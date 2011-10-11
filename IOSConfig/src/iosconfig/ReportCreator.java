@@ -59,11 +59,14 @@ public class ReportCreator {
        
         if (List.size() == 0) {
             out.write("No vulnerabilities present - Line 0 \n"+inputFile+" is considered safe\n");
+
         } else {
             for (Vulnerability vuln : List) {
                 out.write("(Line: "
                         + vuln.getLineNumber() + ") \t\t Violation: '"
+
                         + vuln.getVulnerability() + "'\n\t\t\t Analysis: "
+
                         + this.errorList.get(vuln.getCode()) + "");
                 out.write("\n");
             }

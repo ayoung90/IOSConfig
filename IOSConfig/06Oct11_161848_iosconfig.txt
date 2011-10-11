@@ -1,0 +1,7 @@
+Cisco IOS Configuration Tool - Scan Results
+Input.txt - 2011-10-06 16:18:48
+
+(Line: 16) 		 Violation: 'enable 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.' 		 Unsafe Password Enabling - Should be 'Enable Secret'
+(Line: 20) 		 Violation: 'username keith password 0 LETMEIN' 		 Weak Encrypted Password - Should be level '5'
+(Line: 109) 		 Violation: 'access-list 110 permit icmp any any' 		 Unsafe Access - Should not use 'Any'
+(Line: 110) 		 Violation: 'access-list 110 permit ip any any' 		 Unsafe Access - Should not use 'Any'
