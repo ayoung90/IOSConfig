@@ -1,0 +1,159 @@
+version 12.2
+no service pad
+service timestamps debug uptime
+service timestamps log uptime
+scheduler max-task-time 5000
+!
+no ip http server
+no ip domain lookup
+!
+ip subnet-zero
+ip classless
+!
+!
+hostname 806-pptp
+!
+!
+!
+! -- CHECKING PASSWORD SECURITY --
+! This should not be caught by the file as it uses "Enable Secret"
+enable secret 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.
+! This should  be caught by the file as it does not use "Enable Secret" (1)
+enable 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.
+!
+! This should be caught by the file as it uses the password rating of 7 (2)
+enable secret 7 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.
+! This should be caught by the file as it does not use "Enable Secret" (3, 4)
+enable 7 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.
+! This should be caught by the file as it does not use "Enable Secret" even though it is rated '5'(5)
+enable 5 $1$CD8.$mZPRQ4nMwOKjdksI4XKMz.
+!
+! This should  be caught by the file as its password rating is 0 (6)
+username keith password 0 LETMEIN
+! This should not be caught by the file as its password rating is 5
+username keith password 5 LETMEIN
+!
+!
+!
+aaa new-model
+aaa authentication ppp default group radius local
+aaa authorization network default if-authenticated
+aaa session-id common
+!
+!
+!    Point to RADIUS server on private LAN for
+!    authentication of connecting users
+radius-server host 172.17.1.20 auth-port 1645 acct-port 1646
+radius-server key LETMEIN
+radius-server authorization permit missing Service-Type
+!
+!
+vpdn enable
+!
+vpdn-group 1
+ accept-dialin
+  protocol pptp
+  virtual-template 1
+!
+!
+interface Virtual-Template1
+ ip unnumbered Ethernet0
+ ip mroute-cache
+ peer default ip address pool DIAL-IN
+ ppp encrypt mppe auto required
+ ppp authentication ms-chap ms-chap-v2
+!
+!
+ip local pool DIAL-IN 172.17.8.210 172.17.8.220
+!
+!
+! -- CHECKING ACCESS LIST SECURITY --
+!
+async-bootp dns-server 172.17.1.26
+async-bootp nbns-server 172.17.1.26
+access-list 101 remark ---- fa0/0 in ----
+access-list 101 permit icmp any host 217.145.96.27
+access-list 101 permit udp host 217.145.96.5 host 217.145.96.27 eq 1701
+access-list 101 permit 117 host 217.145.96.5 host 217.145.96.27
+access-list 101 permit tcp 217.145.96.0 0.0.0.128 host 217.145.96.27 eq telnet
+access-list 101 permit tcp 217.145.96.0 0.0.0.128 host 217.145.96.27 eq 22
+access-list 101 permit tcp host 217.145.98.130 host 217.145.96.27 eq telnet
+access-list 101 permit tcp host 217.145.98.130 host 217.145.96.27 eq 22
+access-list 101 permit tcp any host 217.145.96.27 eq 1723
+access-list 101 permit gre any host 217.145.96.27
+access-list 101 permit udp host 217.145.99.9 eq domain host 217.145.96.27
+access-list 101 permit udp host 217.145.98.135 eq domain host 217.145.96.27
+access-list 101 permit udp host 217.145.99.4 eq ntp host 217.145.96.27
+access-list 101 permit udp host 217.145.99.9 eq ntp host 217.145.96.27
+access-list 101 permit udp host 217.145.96.24 eq 1812 host 217.145.96.27
+access-list 101 permit udp host 217.145.96.24 eq 1813 host 217.145.96.27
+access-list 101 permit udp host 217.145.98.132 eq tftp host 217.145.96.27
+access-list 101 permit udp host 217.145.98.132 host 217.145.96.27 eq tftp
+access-list 101 permit udp host 217.145.98.158 host 217.145.96.27 eq snmp
+access-list 101 permit ospf any host 217.145.96.27
+access-list 101 permit ip any 224.0.0.0 0.0.0.255
+access-list 101 deny   ip any any
+access-list 102 remark ---- fa0/0 out ----
+access-list 102 permit icmp host 217.145.96.27 any
+access-list 102 permit tcp host 217.145.96.27 eq 1723 any
+access-list 102 permit gre host 217.145.96.27 any
+access-list 102 permit udp host 217.145.96.27 host 217.145.99.49 eq syslog
+access-list 102 permit udp host 217.145.96.27 host 217.145.99.9 eq domain
+access-list 102 permit udp host 217.145.96.27 host 217.145.98.135 eq domain
+access-list 102 permit udp host 217.145.96.27 host 217.145.99.4 eq ntp
+access-list 102 permit udp host 217.145.96.27 host 217.145.99.9 eq ntp
+access-list 102 permit udp host 217.145.96.27 host 217.145.96.24 eq 1812
+access-list 102 permit udp host 217.145.96.27 host 217.145.96.24 eq 1813
+access-list 102 permit udp host 217.145.96.27 host 217.145.98.132 eq tftp
+access-list 102 permit udp host 217.145.96.27 eq tftp host 217.145.98.132
+access-list 102 permit udp host 217.145.96.27 eq snmp host 217.145.98.158
+access-list 102 permit udp host 217.145.96.27 eq 1701 host 217.145.96.5
+access-list 102 permit 117 host 217.145.96.27 host 217.145.96.5
+access-list 102 permit tcp host 217.145.96.27 eq telnet any
+access-list 102 permit tcp host 217.145.96.27 eq 22 any
+access-list 102 permit tcp host 217.145.96.27 any established
+access-list 102 permit ospf host 217.145.96.27 any
+!
+! The following three should be triggered as vulnerabilities as it says 'any' (7,8,9)
+!
+access-list 103 permit tcp host 10.145.96.27 eq telnet any 
+access-list 104 permit tcp host 192.168.96.27 eq 22 any 
+access-list 105 permit tcp host 172.145.96.27 any established 
+!
+! The following three should not be triggered as vulnerabilities 
+!
+access-list 106 permit tcp host 10.145.96.27 eq telnet 22
+access-list 107 permit tcp host 192.168.96.27 eq 22 22
+access-list 108 permit tcp host 172.145.96.27 22 established
+!
+!
+! The following three should not be triggered as vulnerabilities 
+!
+access-list 109 deny tcp host 10.145.96.27 eq telnet 22
+access-list 109 deny tcp host 192.168.96.27 eq 22 22
+access-list 109 deny tcp host 172.145.96.27 22 established
+!
+! This should not be found as a vulnerability as it "deny's"
+access-list 102 deny   ip any any
+! These should be triggered as a vulnerability as it allows 'any any' (10, 11)
+access-list 110 permit icmp any any
+access-list 110 permit ip any any
+!
+!
+interface Ethernet0
+ ip address 172.17.8.200 255.255.0.0
+ hold-queue 100 out
+!
+ ip address 205.148.34.77 255.255.255.240
+!
+ip route 0.0.0.0 0.0.0.0 205.148.34.65
+!
+!
+line con 0
+ exec-timeout 30 0
+ stopbits 1
+line vty 0 4
+ login
+ password LETMEIN
+!
+end
