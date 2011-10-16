@@ -1,7 +1,13 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Written By Dharshun Sridharan - 41775057, Adam Young - 4200943
+ * 
+ * This software is provided for evaluation and grading purposes only. If this
+ * software is intended to be used in a commercial environment contact the
+ * students involved in the assignment to attain a commercial license.
+ * 
+ * This software is distributed "as is" with no guarantee. Use at your own risk.
  */
+
 package iosconfig;
 
 import java.io.BufferedReader;
@@ -10,16 +16,18 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 /**
- *
- * @author G73
+ * Basic class to read in a file from input and provide an Array of lines in the
+ * file.
+ * @author Dharshun Sridharan - 41775057, Adam Young - 4200943
  */
 public class ConfigReader {
-    /*public ConfigReader(){
-        /*int lines = checkNumberOfLines(inputFile);
-        String[] fileArray = parseToArray(inputFile,lines);*/
-        /* PASS FILE ARRAY TO LINE CHECKER */
-    /*}*/
-    public static int  checkNumberOfLines(String inputFile){
+
+    /**
+     * Returns the amount of lines in a given file.
+     * @param inputFile File to gather line count.
+     * @return number of lines in given file. Console Error on file processing errors.
+     */
+    public static int checkNumberOfLines(String inputFile) {
         int lines = 0;
         try {
             // Open the file that is the first 
@@ -28,9 +36,8 @@ public class ConfigReader {
             // Get the object of DataInputStream
             DataInputStream in = new DataInputStream(fstream);
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
             //Read File Line By Line
-            while ((strLine = br.readLine()) != null) {
+            while (br.readLine() != null) {
                 // Print the content on the console
                 lines++;
             }
@@ -38,10 +45,18 @@ public class ConfigReader {
             in.close();
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
+            System.exit(0);
         }
-    return lines ;
+        return lines;
     }
-    public static String[] parseToArray(String inputFile, int lines){
+
+    /**
+     * Returns an Array of Strings which match the line numbers of the input file.
+     * @param inputFile File to gather lines from.
+     * @param lines count of all lines in the input file.
+     * @return String Array containing each line in the given file in sequence.
+     */
+    public static String[] parseToArray(String inputFile, int lines) {
         String[] fileArray = new String[lines];
         int i = 0;
         try {
@@ -54,15 +69,15 @@ public class ConfigReader {
             String strLine;
             //Read File Line By Line
             while ((strLine = br.readLine()) != null) {
-                fileArray[i]=strLine;
+                fileArray[i] = strLine;
                 i++;
             }
             //Close the input stream
             in.close();
         } catch (Exception e) {//Catch exception if any
             System.err.println("Error: " + e.getMessage());
+            System.exit(0);
         }
         return fileArray;
     }
-    
 }

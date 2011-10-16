@@ -1,19 +1,29 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Written By Dharshun Sridharan - 41775057, Adam Young - 4200943
+ * 
+ * This software is provided for evaluation and grading purposes only. If this
+ * software is intended to be used in a commercial environment contact the
+ * students involved in the assignment to attain a commercial license.
+ * 
+ * This software is distributed "as is" with no guarantee. Use at your own risk.
  */
-package iosconfig;
 
+package iosconfig;
 import java.util.LinkedList;
 
 /**
- *
- * @author G73
+ * Contains methods to check file for Vulnerabilities.
+ * @author Dharshun Sridharan - 41775057, Adam Young - 4200943
  */
 public class LineChecker {
 
     public static LinkedList<Vulnerability> VulnList = new LinkedList<Vulnerability>();
 
+    /**
+     * Scans file for Vulnerabilities and stores found issues in a list
+     * @param fileArray String Array of read in file
+     * @return Vulnerability List
+     */
     public static LinkedList<Vulnerability> checkLines(String[] fileArray) {
         IOSConfig ios = new IOSConfig();
         for (int i = 0; i < fileArray.length; i++) {
